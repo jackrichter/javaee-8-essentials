@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="template.xhtml">
+
+        <ui:define name="pageTitle">HSports Catalog</ui:define>
+        <ui:define name="pageHeader">
+            <h:link value="Catalog Form" outcome="form" /> |
+            <h:link value="Catalog" outcome="list" />
+        </ui:define>
+
+        <ui:define name="body">
+            <h:outputScript library="js" name="shake.js" />
+
+            <h:form id="item-form">
+                <div>
+                    <h:outputLabel value="Product Name" />
+                    <h:inputText id="productName" value="#{catalogItemFormBean.item.name}">
+                        <f:validateRegex pattern="[A-Za-z0-9 ]+" />
+                    </h:inputText>
+                    <div class="errormessage">
+                        <h:message for="productName" />
+                    </div>
+                </div>
+                <div>
+                    <h:outputLabel value="Manufacturer" />
+                    <h:inputText id="manufacturer" value="#{catalogItemFormBean.item.manufacturer}" />
+                    <div class="errormessage">
+                        <h:message for="manufacturer" />
+                    </div>
+                </div>
+                <div>
+                    <h:outputLabel value="Available Date" />
+                    <h:inputText id="availableDate" value="#{catalogItemFormBean.item.availableDate}">
+                        <f:convertDateTime type="localDate" pattern="dd-MM-yyyy" />
+                    </h:inputText>
+                    <div class="errormessage">
+                        <h:message for="availableDate" />
+                    </div>
+                </div>
+                <div>
+                    <h:outputLabel value="Description" />
+                    <h:inputTextarea id="description" value="#{catalogItemFormBean.item.description}" />
+                    <div class="errormessage">
+                        <h:message for="description" />
+                    </div>
+                </div>
+                <h:commandButton value="Submit" action="#{catalogItemFormBean.addItem()}" />
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

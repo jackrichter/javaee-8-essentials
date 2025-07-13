@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="template.xhtml">
+
+        <f:metadata>
+            <f:viewParam name="itemId" value="#{catalogItemDetailBean.itemId}" />
+<!--            <f:event listener="#{catalogItemDetailBean.fetchItem()}" type="preRenderView" />-->
+<!--            <f:event listener="#{catalogItemDetailBean.fetchItemAsync()}" type="preRenderView" />-->
+            <f:event listener="#{catalogItemDetailBean.fetchItemReactive()}" type="preRenderView" />
+        </f:metadata>
+
+        <ui:define name="pageTitle">HSports Catalog</ui:define>
+        <ui:define name="pageHeader">
+            <h:link value="Catalog Form" outcome="form" />
+            <h:link value="Catalog" outcome="list" />
+        </ui:define>
+
+        <ui:define name="body">
+            <div>
+                <h3>Item Details</h3>
+                <div>
+                    <h:outputLabel value="Name:" />
+                    <h:outputLabel value="#{catalogItemDetailBean.item.name}" />
+                </div>
+                <div>
+                    <h:outputLabel value="Manufacturer:" />
+                    <h:outputLabel value="#{catalogItemDetailBean.item.manufacturer}" />
+                </div>
+                <div>
+                    <h:outputLabel value="Quantity" />
+                    <h:outputLabel value="#{catalogItemDetailBean.quantity}" />
+                </div>
+                <div>
+                    <h:outputLabel value="Available Date:" />
+                    <h:outputLabel value="#{catalogItemDetailBean.item.availableDate}">
+                        <f:convertDateTime type="localDate" pattern="dd-MM-yyyy" />
+                    </h:outputLabel>
+                </div>
+            </div>
+
+            <h3>Managers</h3>
+            <h:panelGroup id="managerList">
+                <ui:repeat value="#{catalogItemDetailBean.item.itemManagers}" varStatus="status">
+                    <h:outputText style="margin-right: 3px;" value="#{catalogItemDetailBean.item.itemManagers[status.index].firstName}" />
+                    <h:outputText value="#{catalogItemDetailBean.item.itemManagers[status.index].lastName}" />
+                    <br />
+                </ui:repeat>
+            </h:panelGroup>
+
+            <h:form id="managerForm">
+                <h3>Add an Item Manager</h3>
+                <div>
+                    <div class="errormessage">
+                        <h:messages />
+                    </div>
+                    <div>
+                        <h:outputLabel value="First Name" />
+                        <h:inputText id="firstName" value="#{catalogItemDetailBean.manager.firstName}" />
+                    </div>
+                    <div>
+                        <h:outputLabel value="Last Name" />
+                        <h:inputText id="lastName" value="#{catalogItemDetailBean.manager.lastName}" />
+                    </div>
+                    <div>
+                        <h:outputLabel value="Email" />
+                        <h:inputText id="email" value="#{catalogItemDetailBean.manager.email}" />
+                    </div>
+                </div>
+                <h:commandButton value="Submit" action="#{catalogItemDetailBean.addManager()}">
+                    <f:ajax execute="firstName lastName email" render="managerList managerForm" />
+                </h:commandButton>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>
