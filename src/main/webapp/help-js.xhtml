@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="template.xhtml">
+
+        <f:metadata>
+            <f:viewAction action="#{catalogItemFormBean.init()}" />
+        </f:metadata>
+
+        <ui:define name="pageTitle">Hsports Catalog</ui:define>
+        <ui:define name="pageHeader">
+            <h:link value="Catalog Form" outcome="form" /> |
+            <h:link value="Catalog" outcome="list" /> |
+            <h:link value="Help" outcome="help-js" />
+        </ui:define>
+
+        <ui:define name="body">
+            <script>
+                window.onload = function() {
+                    let socket = new WebSocket("ws://localhost:8080/hsports-catalog/socket/help")
+
+                    socket.onmessage = function(event) {
+                        document.getElementById("message").innerText += event.data;
+                    }
+
+                    document.forms.chat.onsubmit = function() {
+                        let message = document.getElementById("messageText").value;
+                        let name = document.getElementById("name").value;
+                        socket.send(name + ": " + message);
+                        return false;
+                    }
+                }
+            </script>
+            <h3>Help Chat</h3>
+            <form name="chat">
+                <div>
+                    <div>
+                        <label>Name:</label> <input id="name"/>
+                    </div>
+                    <div>
+                        <label>Message:</label> <input id="messageText"/>
+                    </div>
+                    <button type="submit">Send</button>
+                </div>
+                <div id="message"></div>
+            </form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>
