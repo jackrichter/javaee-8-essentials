@@ -49,22 +49,25 @@ public class InventoryItemEndpoint {
         return Response.ok(inventoryItem).build();
     }
 
+//    @GET
+//    @Path("/catalog/{catalogItemId}")
+//    public void asyncFindByCatalogId(@NotNull @PathParam("catalogItemId") Long catalogItemId,
+//                                     @Suspended AsyncResponse asyncResponse) {
+//
+//       new Thread(() -> {
+//           try {
+//               Thread.sleep(5000);
+//           } catch (InterruptedException e) {
+//               throw new RuntimeException(e);
+//           }
+//           asyncResponse.resume(findByCatalogId(catalogItemId));
+//       }).start();
+//    }
+
+
     @GET
     @Path("/catalog/{catalogItemId}")
-    public void ayncFindByCatalogId(@NotNull @PathParam("catalogItemId") Long catalogItemId,
-                                             @Suspended AsyncResponse asyncResponse) {
-
-       new Thread(() -> {
-           try {
-               Thread.sleep(5000);
-           } catch (InterruptedException e) {
-               throw new RuntimeException(e);
-           }
-           asyncResponse.resume(findByCatalogId(catalogItemId));
-       }).start();
-    }
-
-    public InventoryItem findByCatalogId(Long catalogItemId) {
+    public InventoryItem findByCatalogId(@NotNull @PathParam("catalogItemId") Long catalogItemId) {
 
         TypedQuery<InventoryItem> query = this.entityManager
                 .createQuery("SELECT i FROM InventoryItem i WHERE i.catalogItemId = :catalogItemId", InventoryItem.class)
